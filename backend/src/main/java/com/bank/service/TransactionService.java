@@ -28,30 +28,87 @@ public class TransactionService {
     @Autowired
     private BankAccountService bankAccountService;
     
+    /**
+     * Effectuer un dépôt ou un retrait sur un compte
+     * @param rib RIB du compte
+     * @param montant montant de l'opération
+     * @param type "DEPOT" ou "RETRAIT"
+     */
+    @Transactional
+    public void executeDepotRetrait(String rib, BigDecimal montant, String type) {
+        // Récupérer le compte
+        BankAccount compte = bankAccountService.findByRib(rib);
+
+        // Vérifier que le compte est ouvert
+        if (compte.getStatut() != AccountStatus.OUVERT) {
+            throw new RuntimeException("Le compte bancaire est bloqué ou clôturé");
+        }
+
+        if ("RETRAIT".equals(type)) {
+            // Vérifier que le solde est suffisant pour un retrait
+            if (compte.getSolde().compareTo(montant) < 0) {
+                throw new RuntimeException("Solde insuffisant");
+            }
+
+            // Débiter le compte
+            compte.setSolde(compte.getSolde().subtract(montant));
+            compte.setDernierMouvement(LocalDateTime.now());
+
+            // Créer la transaction de débit
+            Transaction transaction = new Transaction();
+            transaction.setIntitule("Retrait espèces");
+            transaction.setType(TransactionType.DEBIT);
+            transaction.setMontant(montant);
+            transaction.setCompte(compte);
+            transaction.setMotif("Retrait effectué par agent");
+            transaction.setDateOperation(LocalDateTime.now());
+
+            transactionRepository.save(transaction);
+
+        } else if ("DEPOT".equals(type)) {
+            // Créditer le compte
+            compte.setSolde(compte.getSolde().add(montant));
+            compte.setDernierMouvement(LocalDateTime.now());
+
+            // Créer la transaction de crédit
+            Transaction transaction = new Transaction();
+            transaction.setIntitule("Dépôt espèces");
+            transaction.setType(TransactionType.CREDIT);
+            transaction.setMontant(montant);
+            transaction.setCompte(compte);
+            transaction.setMotif("Dépôt effectué par agent");
+            transaction.setDateOperation(LocalDateTime.now());
+
+            transactionRepository.save(transaction);
+        } else {
+            throw new RuntimeException("Type d'opération invalide");
+        }
+    }
+
     @Transactional
     public void executeTransfer(TransferRequest request, String ribSource) {
         // Récupérer les comptes
         BankAccount compteSource = bankAccountService.findByRib(ribSource);
         BankAccount compteDestinataire = bankAccountService.findByRib(request.getRibDestinataire());
-        
+
         // Vérifier que le compte source n'est pas bloqué ou clôturé (RG_11)
         if (compteSource.getStatut() != AccountStatus.OUVERT) {
             throw new RuntimeException("Le compte bancaire est bloqué ou clôturé");
         }
-        
+
         // Vérifier que le solde est suffisant (RG_12)
         if (compteSource.getSolde().compareTo(request.getMontant()) < 0) {
             throw new RuntimeException("Solde insuffisant");
         }
-        
+
         // Débiter le compte source (RG_13)
         compteSource.setSolde(compteSource.getSolde().subtract(request.getMontant()));
         compteSource.setDernierMouvement(LocalDateTime.now());
-        
+
         // Créditer le compte destinataire (RG_14)
         compteDestinataire.setSolde(compteDestinataire.getSolde().add(request.getMontant()));
         compteDestinataire.setDernierMouvement(LocalDateTime.now());
-        
+
         // Créer la transaction de débit (RG_15)
         Transaction debit = new Transaction();
         debit.setIntitule("Virement vers " + request.getRibDestinataire());
@@ -61,7 +118,7 @@ public class TransactionService {
         debit.setMotif(request.getMotif());
         debit.setRibDestinataire(request.getRibDestinataire());
         debit.setDateOperation(LocalDateTime.now());
-        
+
         // Créer la transaction de crédit (RG_15)
         Transaction credit = new Transaction();
         credit.setIntitule("Virement en votre faveur de " + ribSource);
@@ -71,7 +128,7 @@ public class TransactionService {
         credit.setMotif(request.getMotif());
         credit.setRibDestinataire(request.getRibDestinataire());
         credit.setDateOperation(LocalDateTime.now());
-        
+
         transactionRepository.save(debit);
         transactionRepository.save(credit);
     }

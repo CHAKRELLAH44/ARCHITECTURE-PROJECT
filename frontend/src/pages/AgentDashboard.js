@@ -53,13 +53,21 @@ const AgentDashboard = () => {
           >
             Nouveau compte bancaire
           </button>
+          <button
+            className={`tab ${activeTab === 'depot' ? 'active' : ''}`}
+            onClick={() => setActiveTab('depot')}
+          >
+            Dépôt / Retrait
+          </button>
         </div>
 
         <div className="card">
           {activeTab === 'client' ? (
             <AddClientForm />
-          ) : (
+          ) : activeTab === 'account' ? (
             <AddAccountForm />
+          ) : (
+            <DepotRetraitForm />
           )}
         </div>
       </div>
@@ -278,6 +286,114 @@ const AddAccountForm = () => {
 
         <button type="submit" className="btn btn-primary">
           Créer
+        </button>
+      </form>
+    </div>
+  );
+};
+
+/**
+ * Formulaire pour effectuer un dépôt ou un retrait
+ */
+const DepotRetraitForm = () => {
+  const [formData, setFormData] = useState({
+    rib: '',
+    montant: '',
+    type: 'DEPOT' // Par défaut: dépôt
+  });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    try {
+      const token = localStorage.getItem('token');
+
+      // Envoyer la requête au backend
+      const response = await axios.post('http://localhost:8080/api/depot-retrait', formData, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      setSuccess(response.data.message);
+
+      // Réinitialiser le formulaire
+      setFormData({
+        rib: '',
+        montant: '',
+        type: 'DEPOT'
+      });
+    } catch (err) {
+      console.error('Erreur dépôt/retrait:', err);
+      const errorMessage = err.response?.data || err.message || 'Erreur lors de l\'opération';
+      setError(typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage));
+    }
+  };
+
+  return (
+    <div>
+      <h2>Dépôt / Retrait</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="rib">RIB du compte *</label>
+          <input
+            type="text"
+            id="rib"
+            name="rib"
+            value={formData.rib}
+            onChange={handleChange}
+            pattern="[0-9]{24}"
+            maxLength="24"
+            required
+            placeholder="123456789012345678901234"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="montant">Montant (€) *</label>
+          <input
+            type="number"
+            id="montant"
+            name="montant"
+            value={formData.montant}
+            onChange={handleChange}
+            min="0.01"
+            step="0.01"
+            required
+            placeholder="100.00"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="type">Type d'opération *</label>
+          <select
+            id="type"
+            name="type"
+            value={formData.type}
+            onChange={handleChange}
+            required
+          >
+            <option value="DEPOT">Dépôt</option>
+            <option value="RETRAIT">Retrait</option>
+          </select>
+        </div>
+
+        {error && <div className="error-message">{error}</div>}
+        {success && <div className="success-message">{success}</div>}
+
+        <button type="submit" className="btn btn-primary">
+          {formData.type === 'DEPOT' ? 'Effectuer le dépôt' : 'Effectuer le retrait'}
         </button>
       </form>
     </div>
