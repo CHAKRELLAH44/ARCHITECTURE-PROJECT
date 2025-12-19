@@ -86,13 +86,14 @@ L'application frontend sera accessible sur `http://localhost:3000`
 ### Agent Guichet
 - **Login**: `agent@bank.com`
 - **Mot de passe**: `agent123`
-- **Profil**: `AGENT_GUICHET`
+- **Profil**: `AGENT_GUICHET` 
 
 ## Fonctionnalités
 
 ### Pour le profil AGENT_GUICHET
 - ✅ Ajouter nouveau client
 - ✅ Créer nouveau compte bancaire
+- ✅ Depot d'argent pour client
 
 ### Pour le profil CLIENT
 - ✅ Consulter Tableau de bord
