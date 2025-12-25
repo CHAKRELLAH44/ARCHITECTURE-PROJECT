@@ -1,8 +1,8 @@
-# Application Bancaire - Architecture des Composants d'Entreprise
+# 🏦 Application Bancaire - Architecture des Composants d'Entreprise
 
 Application bancaire complète avec frontend React et backend Spring Boot utilisant la base de données H2.
 
-## Structure du Projet
+## 📁 Structure du Projet
 
 ```
 Architecture/
@@ -34,14 +34,14 @@ Architecture/
 └── README.md
 ```
 
-## Prérequis
+## 🛠️ Prérequis
 
 - Java 17 ou supérieur
 - Maven 3.6+
 - Node.js 16+ et npm
 - IDE (IntelliJ IDEA, Eclipse, ou VS Code)
 
-## Installation et Lancement
+## 🚀 Installation et Lancement
 
 ### Backend (Spring Boot)
 
@@ -81,19 +81,25 @@ npm start
 
 L'application frontend sera accessible sur `http://localhost:3000`
 
-## Utilisateurs par Défaut
+## 👥 Utilisateurs par Défaut
 
-### Agent Guichet
+### 🔧 Agent Guichet
 - **Login**: `agent@bank.com`
 - **Mot de passe**: `agent123`
-- **Profil**: `AGENT_GUICHET` 
+- **Profil**: `AGENT_GUICHET`
 
-## Fonctionnalités
+### 👤 Client (créé après inscription)
+- **Login**: (email du client)
+- **Mot de passe**: (généré automatiquement et envoyé par email)
+- **Profil**: `CLIENT`
+
+## ✨ Fonctionnalités
 
 ### Pour le profil AGENT_GUICHET
 - ✅ Ajouter nouveau client
 - ✅ Créer nouveau compte bancaire
-- ✅ Depot d'argent pour client
+- ✅ Effectuer un dépôt ou retrait d'argent
+- ✅ Consulter les reçus des opérations
 
 ### Pour le profil CLIENT
 - ✅ Consulter Tableau de bord
@@ -101,13 +107,14 @@ L'application frontend sera accessible sur `http://localhost:3000`
   - Affiche le solde du compte
   - Liste les 10 dernières opérations bancaires
   - Permet de sélectionner parmi plusieurs comptes
-- ✅ Nouveau virement
+- ✅ Effectuer un nouveau virement
+- ✅ Consulter les reçus de virement
 
 ### Fonctionnalités communes
-- ✅ Changer mot de passe
-- ✅ Authentification par JWT (validité 1 heure)
+- 🔐 Changer mot de passe
+- 🔑 Authentification par JWT (validité 1 heure)
 
-## Règles Métier Implémentées
+## 📋 Règles Métier Implémentées
 
 ### Authentification (RG_1, RG_2, RG_3)
 - **RG_1**: Les mots de passe sont cryptés avec BCrypt
@@ -132,7 +139,7 @@ L'application frontend sera accessible sur `http://localhost:3000`
 - **RG_14**: Crédit du compte destinataire
 - **RG_15**: Traçage des deux opérations avec dates précises
 
-## API Endpoints
+## 🔌 API Endpoints
 
 ### Authentification
 - `POST /api/auth/login` - Connexion
@@ -143,6 +150,7 @@ L'application frontend sera accessible sur `http://localhost:3000`
 
 ### Comptes Bancaires (Agent Guichet)
 - `POST /api/accounts` - Créer un compte
+- `POST /api/accounts/operation` - Effectuer un dépôt ou retrait
 
 ### Dashboard (Client)
 - `GET /api/dashboard?rib=xxx` - Obtenir le tableau de bord
@@ -150,7 +158,7 @@ L'application frontend sera accessible sur `http://localhost:3000`
 ### Virements (Client)
 - `POST /api/transfers` - Effectuer un virement
 
-## Technologies Utilisées
+## 💻 Technologies Utilisées
 
 ### Backend
 - Spring Boot 3.2.0
@@ -164,25 +172,120 @@ L'application frontend sera accessible sur `http://localhost:3000`
 - React 18
 - React Router DOM 6
 - Axios
-- CSS3
+- CSS3 (Design professionnel avec accents orange)
 
-## Notes
+---
 
-- L'application utilise une base de données H2 en mémoire, les données seront perdues au redémarrage
-- Pour l'envoi d'emails en production, configurez les paramètres SMTP dans `application.properties`
-- Le token JWT expire après 1 heure d'inactivité
-- L'application utilise CORS pour permettre les requêtes depuis le frontend React
+## 📸 Captures d'écran
 
-## Développement
+### 1. Connexion Agent Guichet ou Client
+![Login Agent](./frontend/pics/1.png)
+*Page de connexion sécurisée pour l'agent guichet*
 
-Pour contribuer au projet :
-1. Forkez le projet
-2. Créez une branche pour votre fonctionnalité
-3. Committez vos changements
-4. Poussez vers la branche
-5. Ouvrez une Pull Request
 
-## Licence
 
-Ce projet est un projet éducatif développé dans le cadre du cours d'Architecture des Composants d'Entreprise.
+### 3. Changement de Mot de Passe - Agent ou Client
+![Change Password Agent](./frontend/pics/4.png)
+*Formulaire de changement de mot de passe pour l'agent avec indicateur de force*
+
+
+
+### 5. Création d'un Nouveau Client
+![Create Client](./frontend/pics/5.png)
+*Formulaire de création d'un nouveau client par l'agent guichet*
+
+### 6. Logs de Création Client
+![Client Creation Logs](./frontend/pics/6.png)
+*Console affichant les logs de création et l'email généré automatiquement*
+
+### 7. Création de Compte Bancaire
+![Create Bank Account](./frontend/pics/7.png)
+*Interface de création d'un nouveau compte bancaire*
+
+### 8. Dépôt ou Retrait d'Argent
+![Deposit Withdrawal](./frontend/pics/8.png)
+*Formulaire pour effectuer des opérations de dépôt ou retrait*
+
+### 9. Dashboard Client
+![Client Dashboard](./frontend/pics/9.png)
+*Tableau de bord client affichant le solde et l'historique des opérations*
+
+### 9. Mode sombre Dashboard Client
+![Client Dashboard](./frontend/pics/9_1.png)
+*Tableau de bord client affichant le solde et l'historique des opérations*
+
+### 10. Nouveau Virement - Client
+![Client Transfer](./frontend/pics/10.png)
+*Interface de création d'un virement bancaire*
+
+### 11. Reçu de Transaction - Agent ou virement client 
+![Agent Receipt](./frontend/pics/11.png)
+*Reçu d'opération pour l'agent guichet*
+
+
+
+---
+
+## 🎨 Design et UX
+
+L'application utilise un design bancaire professionnel avec :
+- 🔵 **Palette de couleurs** : Bleu marine pour la confiance et la stabilité
+- 🟠 **Accents orange** : Pour dynamiser l'interface et guider l'attention
+- 🌙 **Mode sombre** : Support complet pour une expérience confortable
+- ✨ **Animations fluides** : Transitions et effets modernes
+- 📱 **Responsive design** : Compatible mobile, tablette et desktop
+
+---
+
+## 📝 Notes de Développement
+
+### Environnement de Développement
+- Les emails sont affichés dans la console backend
+- La base de données H2 est en mémoire (données perdues au redémarrage)
+- Les tokens JWT expirent après 1 heure
+
+### Sécurité
+- Tous les mots de passe sont hashés avec BCrypt
+- Protection CSRF activée
+- Validation des entrées côté frontend et backend
+- Gestion des erreurs avec messages appropriés
+
+---
+
+## 🐛 Dépannage
+
+### Le backend ne démarre pas
+- Vérifiez que Java 17+ est installé : `java -version`
+- Assurez-vous que le port 8080 est libre
+- Nettoyez et recompilez : `mvn clean install`
+
+### Le frontend ne démarre pas
+- Vérifiez que Node.js est installé : `node --version`
+- Supprimez `node_modules` et réinstallez : `npm install`
+- Assurez-vous que le port 3000 est libre
+
+### Problèmes d'authentification
+- Vérifiez que le backend est bien démarré
+- Consultez la console browser (F12) pour les erreurs
+- Vérifiez que le token JWT n'est pas expiré
+
+---
+
+## 📚 Documentation Supplémentaire
+
+Pour plus d'informations sur les technologies utilisées :
+- [Spring Boot Documentation](https://spring.io/projects/spring-boot)
+- [React Documentation](https://react.dev/)
+- [Spring Security](https://spring.io/projects/spring-security)
+- [JWT.io](https://jwt.io/)
+
+---
+
+## 👨‍💻 Auteurs
+
+**Réalisé par le binôme Joska**
+Yassine Ech-chaoui :echchaoui.yassine@gmail.com
+imane chakrellah : chakrellaah@gmail.com 
+
+---
 
