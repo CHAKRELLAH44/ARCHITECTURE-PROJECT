@@ -12,3 +12,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     Page<Transaction> findByCompteOrderByDateOperationDesc(BankAccount compte, Pageable pageable);
 }
 
+
+
+

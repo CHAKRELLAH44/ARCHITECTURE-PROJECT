@@ -57,3 +57,6 @@ L'application est configurée pour communiquer avec le backend sur `http://local
 
 L'authentification est gérée via JWT stocké dans le localStorage. Le token est automatiquement inclus dans les requêtes axios.
 
+
+
+

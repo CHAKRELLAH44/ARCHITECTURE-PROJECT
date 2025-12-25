@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import './Transfer.css';
+import SuccessModal from '../components/SuccessModal';
+import { generateVirementPDF } from '../utils/pdfGenerator';
 
 const Transfer = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +17,8 @@ const Transfer = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [transactionData, setTransactionData] = useState(null);
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -64,16 +68,26 @@ const Transfer = () => {
         montant: parseFloat(formData.montant),
         motif: formData.motif,
       });
-      setSuccess('Virement effectué avec succès');
+
+      // Préparer les données pour le PDF
+      const data = {
+        date: new Date().toLocaleString('fr-FR'),
+        ribSource: formData.ribSource,
+        ribDestinataire: formData.ribDestinataire,
+        montant: parseFloat(formData.montant),
+        motif: formData.motif,
+      };
+
+      setTransactionData(data);
+      setShowModal(true);
+
+      // Réinitialiser le formulaire
       setFormData({
         ribSource: formData.ribSource,
         ribDestinataire: '',
         montant: '',
         motif: '',
       });
-      setTimeout(() => {
-        navigate('/dashboard/client');
-      }, 2000);
     } catch (err) {
       if (err.response && err.response.status === 401) {
         logout();
@@ -82,6 +96,17 @@ const Transfer = () => {
         setError(err.response?.data?.message || 'Erreur lors du virement');
       }
     }
+  };
+
+  const handleDownloadPDF = () => {
+    if (transactionData) {
+      generateVirementPDF(transactionData);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    navigate('/dashboard/client');
   };
 
   const handleBack = () => {
@@ -191,9 +216,21 @@ const Transfer = () => {
           </form>
         </div>
       </div>
+
+      {/* Modal de succès avec bouton PDF */}
+      <SuccessModal
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        title="Virement effectué avec succès !"
+        message={`Vous avez transféré ${transactionData?.montant.toFixed(2)} € vers le compte ${transactionData?.ribDestinataire}.`}
+        onDownloadPDF={handleDownloadPDF}
+      />
     </div>
   );
 };
 
 export default Transfer;
+
+
+
 

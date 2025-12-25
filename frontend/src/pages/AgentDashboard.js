@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import './AgentDashboard.css';
+import SuccessModal from '../components/SuccessModal';
+import { generateDepotRetraitPDF } from '../utils/pdfGenerator';
 
 /**
  * Dashboard de l'agent guichet
@@ -11,8 +13,19 @@ import './AgentDashboard.css';
  */
 const AgentDashboard = () => {
   const [activeTab, setActiveTab] = useState('client'); // Onglet actif (client ou account)
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('darkMode');
+    return saved ? JSON.parse(saved) : false;
+  });
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+    document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
+
+  const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
   const handleLogout = () => {
     logout();
@@ -27,7 +40,7 @@ const AgentDashboard = () => {
     <div className="dashboard-container">
       <nav className="navbar">
         <div className="navbar-content">
-          <h1>Espace Agent Guichet</h1>
+          <h1>JOSKA-BANK</h1>
           <div className="navbar-actions">
             <button className="btn btn-secondary" onClick={handleChangePassword}>
               Changer mot de passe
@@ -303,6 +316,8 @@ const DepotRetraitForm = () => {
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [transactionData, setTransactionData] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -326,7 +341,17 @@ const DepotRetraitForm = () => {
         }
       });
 
-      setSuccess(response.data.message);
+      // Préparer les données pour le PDF
+      const data = {
+        date: new Date().toLocaleString('fr-FR'),
+        rib: formData.rib,
+        montant: parseFloat(formData.montant),
+        type: formData.type,
+        agent: 'Agent de guichet'
+      };
+
+      setTransactionData(data);
+      setShowModal(true);
 
       // Réinitialiser le formulaire
       setFormData({
@@ -339,6 +364,16 @@ const DepotRetraitForm = () => {
       const errorMessage = err.response?.data || err.message || 'Erreur lors de l\'opération';
       setError(typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage));
     }
+  };
+
+  const handleDownloadPDF = () => {
+    if (transactionData) {
+      generateDepotRetraitPDF(transactionData);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
 
   return (
@@ -396,9 +431,21 @@ const DepotRetraitForm = () => {
           {formData.type === 'DEPOT' ? 'Effectuer le dépôt' : 'Effectuer le retrait'}
         </button>
       </form>
+
+      {/* Modal de succès avec bouton PDF */}
+      <SuccessModal
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        title={`${formData.type === 'DEPOT' ? 'Dépôt' : 'Retrait'} effectué avec succès !`}
+        message={`Opération de ${transactionData?.montant.toFixed(2)} € effectuée sur le compte ${transactionData?.rib}.`}
+        onDownloadPDF={handleDownloadPDF}
+      />
     </div>
   );
 };
 
 export default AgentDashboard;
+
+
+
 

@@ -42,3 +42,6 @@ public class Transaction {
     private String ribDestinataire;
 }
 
+
+
+

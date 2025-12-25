@@ -41,3 +41,6 @@ public class Client {
     private List<BankAccount> comptes = new ArrayList<>();
 }
 
+
+
+

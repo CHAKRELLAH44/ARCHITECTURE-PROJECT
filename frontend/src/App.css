@@ -1,122 +1,530 @@
+/* ============================================
+   DESIGN PROFESSIONNEL BANCAIRE
+   Thème: Orange & Bleu Marine avec Mode Sombre
+   ============================================ */
+
+:root {
+  /* Couleurs principales - Thème bancaire */
+  --primary: #1e3a5f;
+  --primary-600: #2d5a8f;
+  --primary-light: #3d6fa8;
+  --accent-orange: #ff8c42;
+  --accent-orange-dark: #ff6b1a;
+  --accent-orange-light: #ffad70;
+  
+  /* Surfaces et arrière-plans */
+  --surface: #ffffff;
+  --background: #f8fafc;
+  --border: #e2e8f0;
+  
+  /* Texte */
+  --text: #1a202c;
+  --text-secondary: #4a5568;
+  --muted: #64748b;
+  
+  /* Ombres professionnelles */
+  --shadow: 0 4px 16px rgba(30, 58, 95, 0.08);
+  --shadow-hover: 0 12px 32px rgba(30, 58, 95, 0.15);
+  --shadow-orange: 0 8px 24px rgba(255, 140, 66, 0.25);
+  --focus-ring: 0 0 0 3px rgba(255, 140, 66, 0.2);
+}
+
+/* Mode sombre */
+[data-theme="dark"] {
+  --primary: #3d6fa8;
+  --primary-600: #5a8dc9;
+  --primary-light: #7aabd4;
+  --accent-orange: #ff8c42;
+  --accent-orange-dark: #ff6b1a;
+  --accent-orange-light: #ffad70;
+  
+  --surface: #1a2332;
+  --background: #0f1419;
+  --border: #2d3748;
+  
+  --text: #f7fafc;
+  --text-secondary: #cbd5e0;
+  --muted: #94a3b8;
+  
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --shadow-orange: 0 8px 24px rgba(255, 140, 66, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 .App {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 32px 24px;
+  flex: 1;
 }
+
+/* ============================================
+   CARDS - Design bancaire premium
+   ============================================ */
 
 .card {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-  margin-bottom: 20px;
+  background: var(--surface);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 40px;
+  margin-bottom: 32px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideInUp 0.6s ease-out;
 }
 
+/* Accent orange subtil en haut de la carte */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-orange), var(--accent-orange-light));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent-orange);
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   BOUTONS - Style bancaire professionnel
+   ============================================ */
+
 .btn {
-  padding: 10px 20px;
+  padding: 14px 32px;
   border: none;
-  border-radius: 4px;
+  border-radius: 12px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:active {
+  transform: scale(0.98);
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background: linear-gradient(135deg, var(--primary), var(--primary-600));
   color: white;
+  box-shadow: var(--shadow);
+  border: 2px solid transparent;
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-light));
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
 }
 
 .btn-secondary {
-  background-color: #6c757d;
-  color: white;
+  background: transparent;
+  color: var(--accent-orange);
+  border: 2px solid var(--accent-orange);
+  position: relative;
+}
+
+.btn-secondary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: var(--accent-orange);
+  transition: width 0.4s ease;
+  z-index: -1;
+  border-radius: 10px;
+}
+
+.btn-secondary:hover::after {
+  width: 100%;
 }
 
 .btn-secondary:hover {
-  background-color: #545b62;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-orange);
 }
 
 .btn-danger {
-  background-color: #dc3545;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2);
 }
 
 .btn-danger:hover {
-  background-color: #c82333;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(239, 68, 68, 0.3);
 }
 
+/* ============================================
+   FORMULAIRES - Design moderne et accessible
+   ============================================ */
+
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 28px;
+  position: relative;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: 500;
-  color: #333;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* Icône indicateur pour les champs requis */
+.form-group label::after {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--accent-orange);
+  border-radius: 50%;
+  margin-left: 6px;
+  vertical-align: middle;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 16px 20px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
   font-size: 16px;
+  background: var(--surface);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text);
+  font-family: inherit;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: var(--accent-orange);
+  box-shadow: var(--focus-ring);
+  transform: translateY(-2px);
+  background: var(--surface);
 }
 
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+/* Animation pour les champs valides */
+.form-group input:valid:not(:placeholder-shown),
+.form-group select:valid,
+.form-group textarea:valid:not(:placeholder-shown) {
+  border-color: #10b981;
+}
+
+/* ============================================
+   MESSAGES - Alerts professionnels
+   ============================================ */
+
 .error-message {
-  color: #dc3545;
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #f8d7da;
-  border-radius: 4px;
-  border: 1px solid #f5c6cb;
+  color: #dc2626;
+  margin-top: 16px;
+  padding: 16px 20px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 12px;
+  border-left: 4px solid #ef4444;
+  animation: shake 0.5s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+}
+
+.error-message::before {
+  content: '⚠';
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
 }
 
 .success-message {
-  color: #155724;
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #d4edda;
-  border-radius: 4px;
-  border: 1px solid #c3e6cb;
+  color: #059669;
+  margin-top: 16px;
+  padding: 16px 20px;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 12px;
+  border-left: 4px solid #10b981;
+  animation: slideInRight 0.5s ease-out;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
 }
+
+.success-message::before {
+  content: '✓';
+  font-size: 20px;
+  flex-shrink: 0;
+  font-weight: bold;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================
+   TABLEAUX - Style bancaire élégant
+   ============================================ */
 
 .table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 24px;
+  background: var(--surface);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
 }
 
 .table th,
 .table td {
-  padding: 12px;
+  padding: 18px 24px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--border);
 }
 
 .table th {
-  background-color: #f8f9fa;
+  background: linear-gradient(135deg, var(--primary), var(--primary-600));
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 13px;
+  position: relative;
+}
+
+/* Accent orange sur les en-têtes */
+.table th::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-orange), var(--accent-orange-light));
+}
+
+.table tbody tr {
+  transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+  background: linear-gradient(90deg, 
+    rgba(255, 140, 66, 0.05) 0%, 
+    rgba(255, 140, 66, 0.02) 100%
+  );
+  transform: translateX(4px);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Indicateur visuel pour les montants */
+.table td:last-child {
   font-weight: 600;
+  color: var(--accent-orange);
 }
 
-.table tr:hover {
-  background-color: #f5f5f5;
+/* ============================================
+   ANIMATIONS & EFFETS
+   ============================================ */
+
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
 }
 
+.loading {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Effet de brillance pour les éléments premium */
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.card-premium {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-premium::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 140, 66, 0.1), 
+    transparent
+  );
+  animation: shine 3s infinite;
+}
+
+/* ============================================
+   UTILITAIRES
+   ============================================ */
+
+.text-orange {
+  color: var(--accent-orange);
+}
+
+.bg-orange {
+  background: var(--accent-orange);
+}
+
+.border-orange {
+  border-color: var(--accent-orange);
+}
+
+/* Badge pour notifications */
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--accent-orange);
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+/* Séparateur élégant */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--border), 
+    transparent
+  );
+  margin: 32px 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 16px;
+  }
+  
+  .card {
+    padding: 24px;
+    border-radius: 16px;
+  }
+  
+  .btn {
+    padding: 12px 24px;
+    font-size: 13px;
+  }
+  
+  .table th,
+  .table td {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}

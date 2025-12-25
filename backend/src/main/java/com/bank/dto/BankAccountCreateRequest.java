@@ -14,3 +14,6 @@ public class BankAccountCreateRequest {
     private String numeroIdentiteClient;
 }
 
+
+
+

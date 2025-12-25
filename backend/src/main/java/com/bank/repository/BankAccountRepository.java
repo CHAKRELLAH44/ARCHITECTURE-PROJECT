@@ -15,3 +15,6 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Long> 
     List<BankAccount> findByClientOrderByDernierMouvementDesc(Client client);
 }
 
+
+
+

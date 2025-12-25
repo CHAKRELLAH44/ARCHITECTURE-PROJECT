@@ -30,3 +30,6 @@ const ProtectedRoute = ({ children, profile }) => {
 
 export default ProtectedRoute;
 
+
+
+

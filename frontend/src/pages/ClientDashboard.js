@@ -5,13 +5,47 @@ import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import './ClientDashboard.css';
 
+// Theme context for dark mode
+const ThemeContext = React.createContext();
+
+const ThemeProvider = ({ children }) => {
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('darkMode');
+    return saved ? JSON.parse(saved) : false;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+    document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
+
+  const toggleTheme = () => setIsDarkMode(!isDarkMode);
+
+  return (
+    <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
 const ClientDashboard = () => {
   const [dashboard, setDashboard] = useState(null);
   const [selectedRib, setSelectedRib] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('darkMode');
+    return saved ? JSON.parse(saved) : false;
+  });
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+    document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
+
+  const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
   useEffect(() => {
     fetchDashboard();
@@ -85,8 +119,11 @@ const ClientDashboard = () => {
     <div className="dashboard-container">
       <nav className="navbar">
         <div className="navbar-content">
-          <h1>Espace Client</h1>
+          <h1>JOSKA-BANK</h1>
           <div className="navbar-actions">
+            <button className="btn btn-secondary" onClick={toggleTheme}>
+              {isDarkMode ? '☀️' : '🌙'}
+            </button>
             <button className="btn btn-secondary" onClick={handleChangePassword}>
               Changer mot de passe
             </button>
@@ -175,4 +212,7 @@ const ClientDashboard = () => {
 };
 
 export default ClientDashboard;
+
+
+
 

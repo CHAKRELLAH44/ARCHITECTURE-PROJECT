@@ -1,20 +1,416 @@
+/* ============================================
+   CONFIGURATION GLOBALE - SYSTÈME BANCAIRE
+   Design Professionnel avec Accents Orange
+   ============================================ */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* ============================================
+   VARIABLES CSS - Thème Bancaire Premium
+   ============================================ */
+
+:root {
+  /* Couleurs de base - Mode clair */
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  
+  /* Palette bancaire principale */
+  --primary: #1e3a5f;
+  --primary-600: #2d5a8f;
+  --primary-700: #1a2f4d;
+  --primary-light: #3d6fa8;
+  
+  /* Accents orange - Signature visuelle */
+  --accent-orange: #ff8c42;
+  --accent-orange-dark: #ff6b1a;
+  --accent-orange-light: #ffad70;
+  --accent-orange-pale: rgba(255, 140, 66, 0.1);
+  
+  /* États et feedback */
+  --success: #10b981;
+  --success-light: #34d399;
+  --danger: #ef4444;
+  --danger-light: #f87171;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+  
+  /* Surfaces et bordures */
+  --soft: #e2e8f0;
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+  
+  /* Ombres professionnelles */
+  --shadow: 0 4px 16px rgba(30, 58, 95, 0.08);
+  --shadow-hover: 0 12px 32px rgba(30, 58, 95, 0.15);
+  --shadow-orange: 0 8px 24px rgba(255, 140, 66, 0.25);
+  --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  
+  /* Effets et interactions */
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --trans: 300ms;
+  --focus-ring: 0 0 0 3px rgba(255, 140, 66, 0.2);
+  --focus-ring-primary: 0 0 0 3px rgba(30, 58, 95, 0.15);
+  
+  /* Dégradés premium */
+  --gradient-primary: linear-gradient(135deg, #1e3a5f 0%, #2d5a8f 100%);
+  --gradient-orange: linear-gradient(135deg, #ff8c42 0%, #ff6b1a 100%);
+  --gradient-subtle: linear-gradient(135deg, rgba(255, 140, 66, 0.05) 0%, rgba(255, 140, 66, 0.02) 100%);
+}
+
+/* ============================================
+   MODE SOMBRE - Optimisé pour visibilité
+   ============================================ */
+
+[data-theme="dark"] {
+  /* Couleurs de base - Mode sombre */
+  --bg: #0f1419;
+  --surface: #1a2332;
+  --text: #f7fafc;
+  --muted: #94a3b8;
+  
+  /* Palette bancaire ajustée */
+  --primary: #3d6fa8;
+  --primary-600: #5a8dc9;
+  --primary-700: #2d5a8f;
+  --primary-light: #7aabd4;
+  
+  /* Accents orange - Plus lumineux en mode sombre */
+  --accent-orange: #ff8c42;
+  --accent-orange-dark: #ff6b1a;
+  --accent-orange-light: #ffad70;
+  --accent-orange-pale: rgba(255, 140, 66, 0.15);
+  
+  /* États ajustés */
+  --success: #10b981;
+  --success-light: #34d399;
+  --danger: #ef4444;
+  --danger-light: #f87171;
+  --warning: #fbbf24;
+  --info: #60a5fa;
+  
+  /* Surfaces et bordures */
+  --soft: rgba(255, 255, 255, 0.05);
+  --border: #2d3748;
+  --border-light: #374151;
+  
+  /* Ombres adaptées */
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --shadow-orange: 0 8px 24px rgba(255, 140, 66, 0.35);
+  --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  
+  /* Focus adapté */
+  --focus-ring: 0 0 0 3px rgba(255, 140, 66, 0.3);
+  --focus-ring-primary: 0 0 0 3px rgba(61, 111, 168, 0.3);
+  
+  /* Dégradés adaptés */
+  --gradient-primary: linear-gradient(135deg, #3d6fa8 0%, #5a8dc9 100%);
+  --gradient-orange: linear-gradient(135deg, #ff8c42 0%, #ff6b1a 100%);
+  --gradient-subtle: linear-gradient(135deg, rgba(255, 140, 66, 0.1) 0%, rgba(255, 140, 66, 0.05) 100%);
+}
+
+/* ============================================
+   STYLES DE BASE
+   ============================================ */
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 
+               'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 
+               'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f5f5;
+  background: var(--bg);
+  min-height: 100vh;
+  color: var(--text);
+  transition: background var(--trans) cubic-bezier(0.4, 0, 0.2, 1), 
+              color var(--trans) cubic-bezier(0.4, 0, 0.2, 1);
+  line-height: 1.6;
+  font-size: 16px;
 }
 
+/* Amélioration du rendu des polices */
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+/* ============================================
+   ÉLÉMENTS INTERACTIFS
+   ============================================ */
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  transition: all var(--trans) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button {
+  cursor: pointer;
+  user-select: none;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Focus visible moderne */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* États de liens */
+a {
+  color: var(--accent-orange);
+  text-decoration: none;
+  transition: all var(--trans) ease;
+}
+
+a:hover {
+  color: var(--accent-orange-dark);
+  text-decoration: underline;
+}
+
+/* Code formatting */
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', 'Consolas', 
+               'Monaco', 'Courier New', monospace;
+  font-size: 0.9em;
+  background: var(--soft);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--accent-orange);
 }
 
+pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  overflow-x: auto;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+/* ============================================
+   SCROLLBAR PERSONNALISÉE - Style Premium
+   ============================================ */
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--soft);
+  border-radius: 10px;
+  margin: 4px 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gradient-orange);
+  border-radius: 10px;
+  border: 2px solid var(--bg);
+  transition: all var(--trans) ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--accent-orange-dark) 0%, var(--accent-orange) 100%);
+  border-color: var(--surface);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--accent-orange-dark);
+}
+
+/* Scrollbar horizontal */
+::-webkit-scrollbar-corner {
+  background: var(--soft);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-orange) var(--soft);
+}
+
+/* ============================================
+   SÉLECTION DE TEXTE
+   ============================================ */
+
+::selection {
+  background: var(--accent-orange-pale);
+  color: var(--text);
+}
+
+::-moz-selection {
+  background: var(--accent-orange-pale);
+  color: var(--text);
+}
+
+/* ============================================
+   ANIMATIONS GLOBALES
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Animation par défaut pour les nouveaux éléments */
+.animate-in {
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   UTILITAIRES DE TYPOGRAPHIE
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text);
+  margin-bottom: 0.5em;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+p {
+  margin-bottom: 1em;
+  color: var(--text);
+}
+
+strong, b {
+  font-weight: 600;
+  color: var(--accent-orange);
+}
+
+/* ============================================
+   ACCESSIBILITÉ
+   ============================================ */
+
+/* Skip to main content */
+.skip-to-main {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: var(--accent-orange);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 0 0 8px 0;
+  text-decoration: none;
+  z-index: 9999;
+  transition: top 0.3s ease;
+}
+
+.skip-to-main:focus {
+  top: 0;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Mobile First
+   ============================================ */
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+  
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
+  h4 { font-size: 1.25rem; }
+  h5 { font-size: 1.1rem; }
+  h6 { font-size: 1rem; }
+}
+
+/* ============================================
+   UTILITAIRES GLOBAUX
+   ============================================ */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Gradient text effect */
+.gradient-text {
+  background: var(--gradient-orange);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
