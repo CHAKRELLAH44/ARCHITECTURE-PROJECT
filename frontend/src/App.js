@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import Login from './pages/Login';
 import ClientDashboard from './pages/ClientDashboard';
 import AgentDashboard from './pages/AgentDashboard';
+import Landing from './pages/Landing';
 import ChangePassword from './pages/ChangePassword';
 import Transfer from './pages/Transfer';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -62,8 +63,11 @@ function App() {
               }
             />
 
-            {/* Redirection par défaut vers login */}
-            <Route path="/" element={<Navigate to="/login" replace />} />
+            {/* Landing page */}
+            <Route path="/" element={<Landing />} />
+
+            {/* Redirection par défaut vers landing */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </Router>

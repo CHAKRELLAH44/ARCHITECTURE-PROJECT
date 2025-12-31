@@ -42,6 +42,9 @@ const AgentDashboard = () => {
         <div className="navbar-content">
           <h1>JOSKA-BANK</h1>
           <div className="navbar-actions">
+            <button className="theme-toggle btn" onClick={toggleTheme} title={isDarkMode ? "Mode clair" : "Mode sombre"}>
+              {isDarkMode ? '🌙' : '☀️'}
+            </button>
             <button className="btn btn-secondary" onClick={handleChangePassword}>
               Changer mot de passe
             </button>
